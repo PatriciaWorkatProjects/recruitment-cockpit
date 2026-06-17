@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Work@Projects — Recruitment Cockpit</title>
+<style>
+  :root{color-scheme:light;--soft:#faf8f1;--card:#fff;--ink:#1A1A1A;--muted:#6f6a60;--line:#ece7da;
+    --yellow:#F5C842;--orange:#F5A623;--yellow-soft:#fdf3d4;--orange-soft:#fce2c2;--nogo:#f1efe9;--nogo-ink:#95918a;}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--soft);color:var(--ink);font:14px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+  .wrap{max-width:1200px;margin:0 auto;padding:18px 22px 60px}
+  header.top{display:flex;align-items:center;justify-content:space-between;gap:12px;border-bottom:3px solid var(--yellow);padding-bottom:14px;margin-bottom:16px;flex-wrap:wrap}
+  .brand{display:flex;align-items:center;gap:12px}
+  .logo-svg{height:46px;width:46px;flex:none}
+  .logo-mark{font-size:22px;font-weight:800;letter-spacing:-0.5px;text-transform:lowercase}
+  .logo-mark .pr{color:var(--orange)}
+  .tag{font-size:12px;color:var(--muted);margin-top:1px}
+  .headright{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+  .me{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:6px}
+  .me select{font:inherit;font-size:12.5px;padding:5px 8px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--ink)}
+  .reload{border:1px solid var(--line);background:var(--card);border-radius:8px;padding:6px 11px;font-size:12.5px;cursor:pointer;font-weight:600}
+  .reload:hover{background:var(--yellow-soft)}
+  .stamp{color:var(--muted);font-size:12px}
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px}
+  .stat{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:13px 15px;position:relative;overflow:hidden}
+  .stat::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--yellow)}
+  .stat.o::before{background:var(--orange)}
+  .stat .n{font-size:25px;font-weight:750;letter-spacing:-0.5px}
+  .stat .l{color:var(--muted);font-size:12px;margin-top:2px}
+  .grid2{display:grid;grid-template-columns:1.5fr 1fr;gap:16px;align-items:start;margin-bottom:16px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:4px 4px 8px}
+  .card h2{font-size:12.5px;text-transform:uppercase;letter-spacing:.7px;margin:13px 15px 8px;display:flex;align-items:center;gap:8px}
+  .card h2 .badge{background:var(--yellow);color:var(--ink);border-radius:20px;padding:1px 9px;font-size:11px;letter-spacing:0;font-weight:700}
+  .row{display:block;padding:12px 15px;border-top:1px solid var(--line)}
+  .row:first-of-type{border-top:0}
+  .row.warnrow{background:#fef6f6;box-shadow:inset 3px 0 0 #c23a3a}
+  .r1{display:flex;justify-content:space-between;gap:10px;align-items:baseline}
+  .r1 .title{font-weight:650;font-size:14px}
+  .r1 .when{color:var(--muted);font-size:12px;white-space:nowrap}
+  .r2{display:flex;gap:7px;align-items:center;margin-top:6px;flex-wrap:wrap}
+  .sum{color:#4a463f;font-size:12.5px;margin-top:6px}
+  .warnmsg{color:#c23a3a;font-size:12.5px;font-weight:600;margin-top:6px}
+  .pill{font-size:11px;padding:1px 8px;border-radius:20px;background:#f2efe8;color:#5b574e;white-space:nowrap}
+  .pill.src{background:var(--ink);color:#fff;font-weight:600}
+  .pill.go{background:var(--yellow);color:var(--ink);font-weight:700}
+  .pill.nogo{background:var(--nogo);color:var(--nogo-ink);font-weight:600}
+  .pill.warnp{background:#fdecec;color:#c23a3a;font-weight:800}
+  .pill.dlp{background:var(--orange-soft);color:#8a4b00;font-weight:600}
+  .pill.ver{background:#e8f5ee;color:#1f8a52;font-weight:600}
+  .eisen{margin-top:7px}
+  .eisen summary{cursor:pointer;font-size:12px;font-weight:700;color:#8a4b00;list-style:none}
+  .eisen summary::-webkit-details-marker{display:none}
+  .eisen summary::before{content:"▸ "}
+  .eisen[open] summary::before{content:"▾ "}
+  .eisen ul{margin:6px 0 2px;padding-left:18px}
+  .eisen li{font-size:12px;color:#4a463f;margin:2px 0}
+  .r3{margin-top:9px;display:flex;gap:8px;flex-wrap:wrap}
+  .btn{border:0;cursor:pointer;font-size:12.5px;font-weight:700;background:var(--yellow);color:var(--ink);padding:7px 12px;border-radius:9px}
+  .btn:hover{background:var(--orange)}
+  .btn.ghost{background:var(--nogo);color:var(--nogo-ink)}
+  .btn.ghost:hover{background:#e6e2da}
+  .dl{padding:11px 15px;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:10px;align-items:center}
+  .dl:first-of-type{border-top:0}
+  .dl .dt{font-weight:700;font-size:14px;white-space:nowrap}
+  .dl .dt small{display:block;font-weight:500;color:var(--muted);font-size:11px}
+  .dl.urgent .dt{color:var(--orange)}
+  .dl .dn{font-size:13px}
+  .dl .dn .src2{color:var(--muted);font-size:11px}
+  .flag{font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;padding:2px 7px;border-radius:6px;background:var(--orange);color:var(--ink)}
+  .st-row{padding:11px 15px;border-top:1px solid var(--line)}
+  .st-row:first-of-type{border-top:0}
+  .st-row .sr1{display:flex;justify-content:space-between;gap:8px;align-items:center}
+  .st-row .nm{font-weight:650;font-size:13.5px}
+  .st-row .sr2{display:flex;gap:7px;align-items:center;margin-top:6px;flex-wrap:wrap}
+  select.statussel{font:inherit;font-size:11.5px;padding:3px 6px;border:1px solid var(--line);border-radius:7px;background:var(--card);color:var(--ink)}
+  .sstat{font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.4px;padding:2px 8px;border-radius:20px}
+  .s-nieuw{background:var(--yellow-soft);color:#7a5c00}.s-in_behandeling{background:var(--yellow);color:var(--ink)}
+  .s-in_carerix{background:var(--orange-soft);color:#8a4b00}.s-online{background:var(--orange);color:var(--ink)}
+  .s-gesloten{background:var(--nogo);color:var(--nogo-ink)}.s-gearchiveerd{background:#eeeae2;color:#9a958c}
+  .team{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;padding:8px 15px 14px}
+  .col{border:1px solid var(--line);border-radius:10px;padding:10px;min-height:70px}
+  .col h3{margin:0 0 7px;font-size:12.5px;display:flex;align-items:center;gap:6px}
+  .col h3 .cnt{margin-left:auto;background:var(--yellow);color:var(--ink);border-radius:20px;font-size:11px;padding:0 7px;font-weight:700}
+  .col .it{font-size:12px;padding:3px 0;border-top:1px dashed var(--line)}
+  .col .it:first-of-type{border-top:0}
+  .col .none{color:var(--muted);font-size:12px}
+  .empty{color:var(--muted);padding:16px 15px;font-size:13px}
+  .err{background:#fdeaea;border:1px solid #f3c9c9;color:#8c2b2b;border-radius:10px;padding:10px 13px;font-size:13px;margin-bottom:12px}
+  .foot{color:var(--muted);font-size:11.5px;margin-top:18px;text-align:center}
+  #toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(20px);opacity:0;background:var(--ink);color:#fff;padding:11px 18px;border-radius:10px;font-size:13px;font-weight:600;transition:.25s;pointer-events:none;z-index:50;box-shadow:0 6px 20px rgba(0,0,0,.2)}
+  #toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  @media(max-width:860px){.grid2{grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="brand">
+      <svg class="logo-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-label="Work@Projects">
+        <g transform="rotate(45 50 50)"><rect x="14" y="14" width="72" height="72" rx="18" fill="#1A1A1A"/><rect x="19" y="19" width="62" height="62" rx="14" fill="#F5C842"/></g>
+        <circle cx="43" cy="32" r="9" fill="#1A1A1A"/>
+        <path d="M34 47c0-2.4 2-4.4 4.4-4.4H52c4 0 7.2 3.2 7.2 7.2 0 3-2.4 5.4-5.4 5.4h-8.2v16.6c0 2.4-2 4.4-4.4 4.4h-2.4c-2.4 0-4.4-2-4.4-4.4z" fill="#1A1A1A"/>
+      </svg>
+      <div><div class="logo-mark">work<span>@</span><span class="pr">projects</span></div><div class="tag">Recruitment Cockpit — team</div></div>
+    </div>
+    <div class="headright">
+      <label class="me">Ik ben <select id="meSel"><option>Patricia</option><option>Frans</option><option>Sam</option><option>Aldert</option></select></label>
+      <button class="reload" id="reloadBtn">↻ Vernieuwen</button>
+      <span class="stamp" id="stamp">Laden…</span>
+    </div>
+  </header>
+  <div id="errbox"></div>
+  <div class="stats">
+    <div class="stat"><div class="n" id="s-go">–</div><div class="l">GO-signalen vandaag</div></div>
+    <div class="stat"><div class="n" id="s-new">–</div><div class="l">Open vacatures</div></div>
+    <div class="stat o"><div class="n" id="s-dl">–</div><div class="l">Sluit vandaag/morgen</div></div>
+    <div class="stat o"><div class="n" id="s-open">–</div><div class="l">In behandeling (team)</div></div>
+  </div>
+  <div class="grid2">
+    <div class="card"><h2>Nieuwe vacaturesignalen <span class="badge" id="b1count">…</span></h2><div id="signalen"><div class="empty">Laden…</div></div></div>
+    <div class="card"><h2>Deadlines deze week</h2><div id="deadlines"><div class="empty">Laden…</div></div></div>
+  </div>
+  <div class="grid2">
+    <div class="card"><h2>Status per opdracht <span class="badge">gedeeld</span></h2><div id="status"><div class="empty">Laden…</div></div></div>
+    <div class="card"><h2>Wie pakt wat</h2><div id="team"><div class="empty">Laden…</div></div></div>
+  </div>
+  <div class="foot">Live uit Supabase · gedeeld voor het hele team · <span id="diag"></span></div>
+</div>
+<div id="toast"></div>
+<script>
+const SB_URL="https://jjpkgwlqehysfwtvsjru.supabase.co";
+const SB_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpqcGtnd2xxZWh5c2Z3dHZzanJ1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE2MTEwMjMsImV4cCI6MjA5NzE4NzAyM30.isPwYsZTHAv5R4oc9cG62dSQdMUGwyhNOZsciegFwIw";
+const TBL=SB_URL+"/rest/v1/vacature_status";
+const H={"apikey":SB_KEY,"Authorization":"Bearer "+SB_KEY,"Content-Type":"application/json"};
+const TEAM=["Patricia","Frans","Sam","Aldert"];
+let ROWS=[], ME=(localStorage.getItem("rc_me")||"Patricia");
+
+function esc(s){return String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))}
+function toDate(v){if(!v)return null;if(v instanceof Date)return v;let s=String(v).trim().replace(" ","T").replace(/([+-]\d{2})$/,"$1:00");const d=new Date(s);return isNaN(d)?null:d}
+function startOfDay(d){const x=new Date(d);x.setHours(0,0,0,0);return x}
+function fmtDate(d){const x=toDate(d);return x?x.toLocaleDateString("nl-NL",{day:"numeric",month:"short"}):""}
+function fmtTime(d){const x=toDate(d);return x?x.toLocaleTimeString("nl-NL",{hour:"2-digit",minute:"2-digit"}):""}
+function relWhen(d){const x=toDate(d);if(!x)return"";const diff=(startOfDay(new Date())-startOfDay(x))/864e5;if(diff===0)return"Vandaag "+fmtTime(x);if(diff===1)return"Gisteren "+fmtTime(x);if(diff>1&&diff<7)return Math.round(diff)+" dgn geleden";return fmtDate(x)}
+function toast(m){const t=document.getElementById("toast");t.textContent=m;t.classList.add("show");clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove("show"),2600)}
+
+async function loadAll(){
+  try{
+    const res=await fetch(TBL+"?select=*&order=sluiting.asc.nullslast",{headers:H});
+    if(!res.ok) throw new Error("HTTP "+res.status);
+    ROWS=await res.json();
+    document.getElementById("errbox").innerHTML="";
+    renderAll();
+    document.getElementById("stamp").textContent="Bijgewerkt "+new Date().toLocaleTimeString("nl-NL",{hour:"2-digit",minute:"2-digit"});
+    document.getElementById("diag").textContent=ROWS.length+" vacatures geladen";
+  }catch(e){
+    document.getElementById("errbox").innerHTML='<div class="err"><b>Kon data niet laden.</b> '+esc(e.message)+' — controleer de internetverbinding en vernieuw.</div>';
+  }
+}
+async function patch(id,body){
+  try{
+    const res=await fetch(TBL+"?id=eq."+encodeURIComponent(id),{method:"PATCH",headers:Object.assign({},H,{"Prefer":"return=minimal"}),body:JSON.stringify(body)});
+    if(!res.ok) throw new Error("HTTP "+res.status);
+    await loadAll();
+  }catch(e){ toast("Opslaan mislukt: "+e.message); }
+}
+function pakOp(id){ patch(id,{status:"in_behandeling",eigenaar:ME,bijgewerkt_door:ME,carerix_trigger:true}); toast("Opgepakt door "+ME+" — gemarkeerd voor Carerix"); }
+function archiveer(id){ patch(id,{status:"gearchiveerd",bijgewerkt_door:ME}); toast("Gearchiveerd — niet oppakken"); }
+function wijzig(id,s){ patch(id,{status:s,bijgewerkt_door:ME}); toast("Status → "+s.replace("_"," ")); }
+
+const STAGES=["nieuw","in_behandeling","in_carerix","online","gesloten","gearchiveerd"];
+function isToday(d){const x=toDate(d);return x&&startOfDay(x).getTime()===startOfDay(new Date()).getTime()}
+
+function renderStats(){
+  const now=new Date();
+  const open=ROWS.filter(r=>r.status==="nieuw");
+  document.getElementById("s-go").textContent=open.filter(r=>r.go_nogo!=="nogo"&&isToday(r.binnengekomen)).length;
+  document.getElementById("s-new").textContent=open.length;
+  const dls=ROWS.filter(r=>r.status==="nieuw"&&r.sluiting).map(r=>toDate(r.sluiting));
+  document.getElementById("s-dl").textContent=dls.filter(d=>{const f=(startOfDay(d)-startOfDay(now))/864e5;return f>=0&&f<=1}).length;
+  document.getElementById("s-open").textContent=ROWS.filter(r=>r.status==="in_behandeling"||r.status==="in_carerix").length;
+}
+function renderSignalen(){
+  const list=ROWS.filter(r=>r.status==="nieuw").sort((a,b)=>{const ga=a.go_nogo==="nogo"?1:0,gb=b.go_nogo==="nogo"?1:0;if(ga!==gb)return ga-gb;return (toDate(b.binnengekomen)||0)-(toDate(a.binnengekomen)||0)});
+  document.getElementById("b1count").textContent=list.length;
+  const el=document.getElementById("signalen");
+  if(!list.length){el.innerHTML='<div class="empty">Geen openstaande vacatures. (Draait de feeder-taak al? Die vult Supabase.)</div>';return}
+  el.innerHTML=list.map(r=>{
+    const warn=r.waarschuwing||"";
+    const badge=warn?'<span class="pill warnp">⚠ NIET OPPAKKEN</span>':(r.go_nogo==="nogo"?'<span class="pill nogo">NO-GO</span>':(r.go_nogo==="go"?'<span class="pill go">GO</span>':'<span class="pill">nieuw</span>'));
+    const dl=r.sluiting?`<span class="pill dlp">sluit ${fmtDate(r.sluiting)} ${fmtTime(r.sluiting)}</span>`:"";
+    const ver=r.verrijkt_op?'<span class="pill ver">✓ verrijkt</span>':"";
+    const cl=r.opdrachtgever?`<span class="pill">${esc(r.opdrachtgever)}</span>`:"";
+    const src=r.bron?`<span class="pill src">${esc(r.bron)}</span>`:"";
+    const sum=r.samenvatting?`<div class="sum">${esc(r.samenvatting)}</div>`:"";
+    const warnHtml=warn?`<div class="warnmsg">⚠ ${esc(warn)}</div>`:"";
+    let eisenHtml="";
+    if(r.eisen){const items=String(r.eisen).split(/\r?\n|•/).map(x=>x.trim()).filter(Boolean);if(items.length)eisenHtml=`<details class="eisen"><summary>Eisen &amp; wensen (${items.length})</summary><ul>${items.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></details>`}
+    const carerix=warn?"":`<button class="btn" onclick="pakOp('${esc(r.id)}')">→ Zet in Carerix + online</button>`;
+    return `<div class="row ${warn?"warnrow":""}">
+      <div class="r1"><span class="title">${esc(r.vacature_naam)}</span><span class="when">${relWhen(r.binnengekomen)}</span></div>
+      ${sum}${warnHtml}${eisenHtml}
+      <div class="r2">${badge}${src}${cl}${dl}${ver}</div>
+      <div class="r3">${carerix}<button class="btn ghost" onclick="archiveer('${esc(r.id)}')">Niet oppakken</button></div>
+    </div>`;
+  }).join("");
+}
+function renderDeadlines(){
+  const now=new Date();
+  const dls=ROWS.filter(r=>r.sluiting&&r.status!=="gearchiveerd"&&r.status!=="gesloten").map(r=>({r,d:toDate(r.sluiting)})).filter(x=>x.d&&(startOfDay(x.d)-startOfDay(now))/864e5>=0&&(startOfDay(x.d)-startOfDay(now))/864e5<=7).sort((a,b)=>a.d-b.d);
+  const el=document.getElementById("deadlines");
+  if(!dls.length){el.innerHTML='<div class="empty">Geen sluitingen in de komende 7 dagen.</div>';return}
+  el.innerHTML=dls.map(({r,d})=>{const f=(startOfDay(d)-startOfDay(now))/864e5;const flag=f===0?'<span class="flag">vandaag</span>':(f===1?'<span class="flag">morgen</span>':"");
+    return `<div class="dl ${f<=1?"urgent":""}"><div class="dt">${fmtDate(d)}<small>${fmtTime(d)}</small></div><div class="dn">${esc(r.vacature_naam)} ${flag}<div class="src2">${esc(r.bron||r.opdrachtgever||"")}</div></div></div>`}).join("");
+}
+function renderStatus(){
+  const rows=ROWS.filter(r=>r.status==="in_behandeling"||r.status==="in_carerix"||r.status==="online");
+  const el=document.getElementById("status");
+  if(!rows.length){el.innerHTML='<div class="empty">Nog geen opdrachten opgepakt. Klik bij een GO-signaal op "Zet in Carerix + online".</div>';return}
+  el.innerHTML=rows.map(r=>{
+    const sl=r.sluiting?`<span class="pill">sluit ${fmtDate(r.sluiting)} ${fmtTime(r.sluiting)}</span>`:"";
+    const eig=r.eigenaar?`<span class="pill">${esc(r.eigenaar)}</span>`:"";
+    const opts=STAGES.map(s=>`<option ${r.status===s?"selected":""}>${s}</option>`).join("");
+    return `<div class="st-row"><div class="sr1"><span class="nm">${esc(r.vacature_naam)}</span><span class="sstat s-${r.status}">${r.status.replace("_"," ")}</span></div>
+      <div class="sr2">${eig}${sl}<select class="statussel" onchange="wijzig('${esc(r.id)}',this.value)">${opts}</select></div></div>`}).join("");
+}
+function renderTeam(){
+  const el=document.getElementById("team");
+  el.innerHTML=`<div class="team">${TEAM.map(n=>{const mine=ROWS.filter(r=>r.eigenaar===n&&(r.status==="in_behandeling"||r.status==="in_carerix"||r.status==="online"));
+    const items=mine.length?mine.map(r=>`<div class="it">${esc(r.vacature_naam)} <span class="sstat s-${r.status}" style="font-size:9.5px">${r.status.replace("_"," ")}</span></div>`).join(""):'<div class="none">—</div>';
+    return `<div class="col"><h3><span>${n}</span><span class="cnt">${mine.length}</span></h3>${items}</div>`}).join("")}</div>`;
+}
+function renderAll(){renderStats();renderSignalen();renderDeadlines();renderStatus();renderTeam()}
+
+document.getElementById("meSel").value=ME;
+document.getElementById("meSel").addEventListener("change",e=>{ME=e.target.value;localStorage.setItem("rc_me",ME);renderTeam()});
+document.getElementById("reloadBtn").addEventListener("click",loadAll);
+loadAll();
+setInterval(loadAll,30000); // auto-vernieuwen elke 30s (gewone webpagina: geen toestemmingsvraag)
+</script>
+</body>
+</html>
