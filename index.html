@@ -85,6 +85,11 @@
   .col .it{font-size:12px;padding:3px 0;border-top:1px dashed var(--line)}
   .col .it:first-of-type{border-top:0}
   .col .none{color:var(--muted);font-size:12px}
+  .arcsum{cursor:pointer;font-size:12.5px;text-transform:uppercase;letter-spacing:.7px;font-weight:700;padding:13px 15px;list-style:none;display:flex;align-items:center;gap:8px}
+  .arcsum::-webkit-details-marker{display:none}
+  .arcsum::before{content:"▸ "}
+  details[open] .arcsum::before{content:"▾ "}
+  .arcsum .badge{background:var(--nogo);color:var(--nogo-ink);border-radius:20px;padding:1px 9px;font-size:11px;letter-spacing:0}
   .empty{color:var(--muted);padding:16px 15px;font-size:13px}
   .err{background:#fdeaea;border:1px solid #f3c9c9;color:#8c2b2b;border-radius:10px;padding:10px 13px;font-size:13px;margin-bottom:12px}
   .foot{color:var(--muted);font-size:11.5px;margin-top:18px;text-align:center}
@@ -125,6 +130,10 @@
     <div class="card"><h2>Status per opdracht <span class="badge">gedeeld</span></h2><div id="status"><div class="empty">Laden…</div></div></div>
     <div class="card"><h2>Wie pakt wat</h2><div id="team"><div class="empty">Laden…</div></div></div>
   </div>
+  <details class="card" style="margin-bottom:16px;">
+    <summary class="arcsum">Gearchiveerd <span class="badge" id="arcCount">0</span></summary>
+    <div id="archief"></div>
+  </details>
   <div class="foot">Live uit Supabase · gedeeld voor het hele team · <span id="diag"></span></div>
 </div>
 <div id="toast"></div>
@@ -167,6 +176,7 @@ async function patch(id,body){
 function pakOp(id){ patch(id,{status:"in_behandeling",eigenaar:ME,bijgewerkt_door:ME,carerix_trigger:true}); toast("Opgepakt door "+ME+" — gemarkeerd voor Carerix"); }
 function archiveer(id){ patch(id,{status:"gearchiveerd",bijgewerkt_door:ME}); toast("Gearchiveerd — niet oppakken"); }
 function wijzig(id,s){ patch(id,{status:s,bijgewerkt_door:ME}); toast("Status → "+s.replace("_"," ")); }
+function herstel(id){ patch(id,{status:"nieuw",carerix_trigger:false,bijgewerkt_door:ME}); toast("Teruggezet in de beslis-inbox"); }
 
 const STAGES=["nieuw","in_behandeling","in_carerix","online","gesloten","gearchiveerd"];
 function isToday(d){const x=toDate(d);return x&&startOfDay(x).getTime()===startOfDay(new Date()).getTime()}
@@ -230,7 +240,14 @@ function renderTeam(){
     const items=mine.length?mine.map(r=>`<div class="it">${esc(r.vacature_naam)} <span class="sstat s-${r.status}" style="font-size:9.5px">${r.status.replace("_"," ")}</span></div>`).join(""):'<div class="none">—</div>';
     return `<div class="col"><h3><span>${n}</span><span class="cnt">${mine.length}</span></h3>${items}</div>`}).join("")}</div>`;
 }
-function renderAll(){renderStats();renderSignalen();renderDeadlines();renderStatus();renderTeam()}
+function renderArchief(){
+  const arc=ROWS.filter(r=>r.status==="gearchiveerd").sort((a,b)=>(toDate(b.laatst_bijgewerkt)||0)-(toDate(a.laatst_bijgewerkt)||0));
+  document.getElementById("arcCount").textContent=arc.length;
+  const el=document.getElementById("archief");
+  if(!arc.length){el.innerHTML='<div class="empty">Niets gearchiveerd.</div>';return}
+  el.innerHTML=arc.map(r=>`<div class="st-row"><div class="sr1"><span class="nm">${esc(r.vacature_naam)}</span><span class="sstat s-gearchiveerd">gearchiveerd</span></div><div class="sr2">${r.bron?`<span class="pill src">${esc(r.bron)}</span>`:""}${r.opdrachtgever?`<span class="pill">${esc(r.opdrachtgever)}</span>`:""}<button class="btn ghost" onclick="herstel('${esc(r.id)}')">↩ Terugzetten</button></div></div>`).join("");
+}
+function renderAll(){renderStats();renderSignalen();renderDeadlines();renderStatus();renderTeam();renderArchief()}
 
 document.getElementById("meSel").value=ME;
 document.getElementById("meSel").addEventListener("change",e=>{ME=e.target.value;localStorage.setItem("rc_me",ME);renderTeam()});
