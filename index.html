@@ -208,7 +208,7 @@ function renderSignalen(){
     const warnHtml=warn?`<div class="warnmsg">⚠ ${esc(warn)}</div>`:"";
     let eisenHtml="";
     if(r.eisen){const items=String(r.eisen).split(/\r?\n|•/).map(x=>x.trim()).filter(Boolean);if(items.length)eisenHtml=`<details class="eisen"><summary>Eisen &amp; wensen (${items.length})</summary><ul>${items.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></details>`}
-    const carerix=warn?"":`<button class="btn" onclick="pakOp('${esc(r.id)}')">→ Zet in Carerix + online</button>`;
+    const carerix=warn?`<button class="btn" onclick="pakOp('${esc(r.id)}')">→ Toch oppakken</button>`:`<button class="btn" onclick="pakOp('${esc(r.id)}')">→ Zet in Carerix + online</button>`;
     return `<div class="row ${warn?"warnrow":""}">
       <div class="r1"><span class="title">${esc(r.vacature_naam)}</span><span class="when">${relWhen(r.binnengekomen)}</span></div>
       ${sum}${warnHtml}${eisenHtml}
